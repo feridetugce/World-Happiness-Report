@@ -198,4 +198,80 @@ df5["Region"] = {"Trinidad & Tobago": "Latin America and Caribbean",
 
 df_region["Country"]
 
+# Sonradan listeye giren ülkeler ve listede olup da ismi farklı olduğu için bölgesi cıkmayan ülkeler var
+# bu ülkelerin de bölgelerini tanımlayalım
+s1= dict(zip(df_region["Country"],df_region["Region"]))
+s2= {"Belize": "Latin America and Caribbean",
+     "Namibia": "Sub-Saharan Africa",
+     "Gambia": "Sub-Saharan Africa"}
+s1.update(s2)  #iki listeyi birleştirdik
+s1
+# df_region = pd.DataFrame(s1).reset_index()
+country = list(s1.keys())
+region = list(s1.values())
+df_region = pd.DataFrame(list(zip(country, region)),
+                  columns=['Country', 'Region'])
+
+df1["Region"].unique()
+
+#  Tekrar merge edelim
+
+df3 = pd.merge(df3, df_region, on="Country", how="left")
+#df1.loc[df1["Region"]=='Western Europe']
+#df3.loc[df3["Region"]=='Western Europe']
+
+df3[df3["Region"].isnull()]
+df3.info()
+
+df4 = pd.merge(df4, df_region, on="Country", how="left")
+df5 = pd.merge(df5, df_region, on="Country", how="left")
+
+######### Veri seti üzerinde çalışmaya başlayabiliriz
+##   bölgelere göre mutluluk skorları  ##
+df1.groupby("Region").agg({"Happiness Score": "mean"}).sort_values(by="Happiness Score", ascending=False)
+
+sns.boxplot(x="Region", y="Happiness Score", data=df1)
+g1= sns.boxplot(x="Region", y="Happiness Score", data=df1)
+g1.set_xticklabels(g1.get_xticklabels(), rotation=90) #x deki yazıları dik yazar
+plt.show()
+
+# GDP ekleyelim
+df1_ = df1.groupby("Region").agg({"Happiness Score": "mean","Economy (GDP per Capita)": "mean"}).\
+    sort_values(by="Happiness Score", ascending=False)
+df1_.reset_index()
+
+sns.scatterplot(x="Happiness Score",y="Economy (GDP per Capita)",hue="Region",style=None,data=df1_)
+
+# 2015 de mutluluk sıralamasındaki ilk 10 ülke
+df1_10 = df1.groupby("Country").agg({"Happiness Score": "mean", "Health (Life Expectancy)": "mean"}).\
+    sort_values(by="Happiness Score", ascending=False).head(10)
+
+sns.scatterplot(x="Happiness Score",y="Health (Life Expectancy)",hue="Country",style=None,data=df1_10)
+
+#2019 da mutluluk sıralamasındaki ilk 10 ülke
+df5_10= df5.groupby("Country").agg({"Happiness Score": "mean", "Health (Life Expectancy)": "mean"}).\
+    sort_values(by="Happiness Score", ascending=False).head(10)
+
+sns.scatterplot(x="Happiness Score",y="Health (Life Expectancy)",hue="Country",style=None,data=df5_10)
+
+#######  Bütün yılları birleştirelim
+df = pd.concat([df1,df2,df3,df4,df5],axis=0,ignore_index = True)  #axis=0 alt alta birlestirir
+df.head()
+
+df = df[["Country", "Region", "Happiness Rank", "Happiness Score", "Economy (GDP per Capita)", "Health (Life Expectancy)", "Freedom", "Trust (Government Corruption)", "Generosity", "Year"]]
+df.info()
+
+# yıllara görefarklı skorlara bakalım
+dff1 = df.groupby("Year").agg({"Happiness Score": "mean"})
+dff1.plot()
+
+dff2 = df.groupby("Year").agg({"Economy (GDP per Capita)": "mean"})
+dff2.plot()
+
+dff3 = df.groupby("Year").agg({"Trust (Government Corruption)": "mean"})
+dff3.plot()
+
+dff4 = df.groupby("Year").agg({"Health (Life Expectancy)": "mean"})
+dff4.plot()
+
 
