@@ -64,3 +64,37 @@ df3 = pd.read_csv("Dünya mutluluk endeksi\2017.csv")
 df4 = pd.read_csv("Dünya mutluluk endeksi\2018.csv")
 df5 = pd.read_csv("Dünya mutluluk endeksi\2019.csv")
 
+# her sete ilişkin incelemeleri yapalım, örneğin:
+
+df1.columns
+df2.head()
+df3.shape()
+df4.isnull().sum()
+df5.describe().T
+df3.info() 
+
+# Aynı bilgilere ait kolonlar farklı veri setlerinde farklı şekilde isimlendirilmiş.
+# Veri setlerindeki isimleri df1'e göre düzenleyelim
+
+df3.rename(columns={"Happiness.Rank": "Happiness Rank",
+            "Happiness.Score": "Happiness Score",
+            "Economy..GDP.per.Capita.": "Economy (GDP per Capita)",
+            "Health..Life.Expectancy.": "Health (Life Expectancy)",
+            "Trust..Government.Corruption.": "Trust (Government Corruption)"},inplace=True)
+
+df4.rename(columns={"Overall rank": "Happiness Rank",
+            "Score": "Happiness Score",
+            "GDP per capita": "Economy (GDP per Capita)",
+            "Healthy life expectancy": "Health (Life Expectancy)",
+            "Freedom to make life choices": "Freedom",
+            "Perceptions of corruption": "Trust (Government Corruption)",
+            "Country or region": "Country"},inplace=True)
+
+df5.rename(columns={"Overall rank": "Happiness Rank",
+            "Score": "Happiness Score",
+            "GDP per capita": "Economy (GDP per Capita)",
+            "Healthy life expectancy": "Health (Life Expectancy)",
+            "Freedom to make life choices": "Freedom",
+            "Perceptions of corruption": "Trust (Government Corruption)",
+            "Country or region": "Country"},inplace=True)
+
