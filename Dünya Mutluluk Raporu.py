@@ -274,4 +274,27 @@ dff3.plot()
 dff4 = df.groupby("Year").agg({"Health (Life Expectancy)": "mean"})
 dff4.plot()
 
+# Bölgelere göre incelemeler
+df.groupby(["Region", "Year"]).agg({"Happiness Score": "mean"})
+df.groupby("Region").agg({"Happiness Score": "mean"})
+sns.boxplot(x="Happiness Score", y="Region",  data=df)
+
+df.groupby("Region")["Economy (GDP per Capita)"].mean().sort_values(ascending=False).reset_index()
+sns.boxplot(x="Economy (GDP per Capita)", y="Region",  data=df)
+
+dfr = df.groupby("Region")["Economy (GDP per Capita)", "Happiness Score"].mean().sort_values(by="Happiness Score", ascending=False).reset_index()
+sns.scatterplot(x="Happiness Score",y="Economy (GDP per Capita)",hue="Region",style=None,data=dfr)
+
+# Distopyadaki ülkeler
+# df.groupby("Country")["Happiness Score"].mean().sort_values(ascending=True).reset_index().head(15)
+
+# Para mutluluk getiriyor mu?
+df_happines = df.groupby("Country").agg({"Happiness Score": "mean", "Economy (GDP per Capita)": "mean"}).sort_values(by="Economy (GDP per Capita)", ascending=False).reset_index().head(10)
+sns.scatterplot(x="Happiness Score",y="Economy (GDP per Capita)",hue="Country",style=None,data=df_happines)
+# df["Happiness Score"].mean()
+
+# Hükümete güven
+df_trust = df.groupby("Country").agg({"Happiness Score": "mean", "Trust (Government Corruption)": "mean"}).sort_values(by="Trust (Government Corruption)", ascending=False).reset_index().head(10)
+sns.scatterplot(x="Happiness Score",y="Trust (Government Corruption)",hue="Country",style=None,data=df_trust)
+#burada dikkatimi ceken Rwanda en mutsuz 4.ülke,ama Trust (Government Corruption) 'da 1.sırada
 
