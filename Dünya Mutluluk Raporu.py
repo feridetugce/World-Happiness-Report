@@ -98,3 +98,104 @@ df5.rename(columns={"Overall rank": "Happiness Rank",
             "Perceptions of corruption": "Trust (Government Corruption)",
             "Country or region": "Country"},inplace=True)
 
+
+# setleri birleştirmeden önce hangi yıllara ait olduklarını gösteren kolonu ekleyelim
+
+df1["Year"] = "2015"
+df2["Year"] = "2016"
+df3["Year"] = "2017"
+df4["Year"] = "2018"
+df5["Year"] = "2019"
+
+# Aynı ülkenin ismi farklı veri setlerinde farklı yazılmış durumda. df1'e göre düzenleyelim.
+#df2'de 1 ülkenin ismi farklı yazılmış
+df2[df2["Country"]=="Somaliland Region"]
+df2["Country"][96] = "Somaliland region"
+
+
+#df3'de 4 ülkenin ismi df1 den farklı yazılmıs,onları düzelttim,cünkü listeleri birleştirdigimizde region karşılıgı gelmiyor
+df3[df3["Country"]=="Taiwan Province of China"]
+df3["Country"][32] = "Taiwan"
+
+df3[df3["Country"]=="Hong Kong S.A.R., China"]
+df3["Country"][70] = "Hong Kong"
+
+df3[df3["Country"]=="South Sudan"]
+df3["Country"][146] = "Sudan"
+
+df3[df3["Country"]=="Somalia"]
+df3["Country"][92] = "Somaliland region"
+
+#df4'te 4 ülkenin ismi farklı yazılmıs onları düzelttim
+df4[df4["Country"]=="Trinidad & Tobago"]
+df4["Country"][37] = "Trinidad and Tobago"
+
+df4[df4["Country"]=="Northern Cyprus"]
+df4["Country"][57] = "North Cyprus"
+
+df4[df4["Country"]=="South Sudan"]
+df4["Country"][153] = "Sudan"
+
+df4[df4["Country"]=="Somalia"]
+df4["Country"][97] = "Somaliland region"
+
+#df5'te 5 ülkenin ismi farklı yazılmıs
+df5[df5["Country"]=="Trinidad & Tobago"]
+df5["Country"][38] = "Trinidad and Tobago"
+
+df5[df5["Country"]=="Northern Cyprus"]
+df5["Country"][63] = "North Cyprus"
+
+df5[df5["Country"]=="North Macedonia"]
+df5["Country"][83] = "Macedonia"
+
+df5[df5["Country"]=="South Sudan"]
+df5["Country"][155] = "Sudan"
+
+df5[df5["Country"]=="Somalia"]
+df5["Country"][111] = "Somaliland region"
+
+
+# Her df'de bölge sütunu olmadıgı icin yeni bir df olusturup df1'e göre Country ve Region ekleyelim
+df_region = df1[["Country", "Region"]]
+
+# df3-df4-df5'te Region kolonu yok. Veri setinden Region kolonunu düşürmek yerine olmayan setlere de ekleyelim 
+df3[df3["Region"].isnull()]
+df4[df4["Region"].isnull()]
+df5[df5["Region"].isnull()]
+
+df3 = pd.merge(df3, df_region, on="Country", how="left")
+df3[df3["Region"].isnull()]
+df4 = pd.merge(df4, df_region, on="Country", how="left")
+df4[df4["Region"].isnull()]
+df5 = pd.merge(df5, df_region, on="Country", how="left")
+df5[df5["Region"].isnull()]
+
+# df'lerde bazı ülkelere ait Region kısmı NaN olarak geliyor. Bunları veri setinden atabiliriz ya da ekleyebiliriz. 
+# Kendimiz ekleyelim(internet araştırması ile)
+
+df3["Region"] = {"Taiwan Province of China": "Eastern Asia", 
+                "Belize": "Latin America and Caribbean",
+                "Hong Kong S.A.R., China": "Eastern Asia", 
+                "Somalia": "Sub-Saharan Africa",
+                "South Sudan": "Sub-Saharan Africa", 
+                "Namibia": "Sub-Saharan Africa"}
+
+df4["Region"] = {"Trinidad & Tobago": "Latin America and Caribbean",
+                "Belize": "Latin America and Caribbean",
+                "Northern Cyprus": "Western Europe",
+                "Somalia": "Sub-Saharan Africa", 
+                "Namibia": "Sub-Saharan Africa",
+                "South Sudan": "Sub-Saharan Africa"}
+
+df5["Region"] = {"Trinidad & Tobago": "Latin America and Caribbean",
+                 "Northern Cyprus": "Western Europe",
+                 "North Macedonia": "Central and Eastern Europe",
+                 "Somalia": "Sub-Saharan Africa", 
+                 "Namibia": "Sub-Saharan Africa",
+                 "South Sudan": "Sub-Saharan Africa", 
+                 "Gambia": "Sub-Saharan Africa"}
+
+df_region["Country"]
+
+
