@@ -44,3 +44,5 @@ The Dystopia Residual metric actually is the Dystopia Happiness Score(1.85) + th
 answer.
 
 If you add all these factors up, you get the happiness score so it might be un-reliable to model them to predict Happiness Scores.
+
+Note: Data set is downloaded from Kaggle.
